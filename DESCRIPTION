@@ -1,0 +1,21 @@
+Package: CDRalg
+Type: Package
+Title: Create CDR (Clinical Dementia Rating) total scores from raw data
+Version: 0.1.0
+Author: Kristoffer Bäckman
+Maintainer: Kristoffer Bäckman <kristoffer.backman@gmail.com>
+Description: Provides easy to use R functions for use with CDR data. 
+URL: http://github.com/thebackman/CDRalg
+BugReports: http://github.com/thebackman/CDRalg/issues
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr
+Imports: dplyr,
+    purrr,
+    readr,
+    readxl
+RoxygenNote: 6.0.1
+Depends: R (>= 2.10)

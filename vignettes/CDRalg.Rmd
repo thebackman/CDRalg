@@ -1,0 +1,173 @@
+---
+title: "Clinical Dementia Rating scale - Algorithm"
+author: "Kristoffer Bäckman"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+bibliography: bibliography.bibtex
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = FALSE}
+options(width = 150)
+```
+
+
+## Introduction
+
+This R package contains a function to assign a global CDR-rating based on the 
+algorithm by [@morris1993clinical]. A implementation of algorithm can be found 
+[here](https://www.alz.washington.edu/cdrnacc.html). The scoring rules are also 
+found
+[here](http://alzheimer.wustl.edu/cdr/pdfs/Assignment%20of%20CDR%20rating.pdf).
+
+## Pre usage
+
+In order to use the function the data must be read into R. This could be done 
+using several packages depending on your type of input data. Packages such as
+`haven`, `readr` or `readxl` are avaliable. I will show an example using data
+stored in an excel sheet.
+
+There are a few prerequisites for the data.
+
+1. The data set must have an ID-number. This is used for internal merging.
+2. The data must have the variables glo5-glo9 and they must have these names.
+
+These are the variables:
+
+* __glo5__ - memory (m)
+* __glo6__ - orientation (o)
+* __glo7__ - judgement, problemsolving (jps)
+* __glo8__ - community affairs (ca)
+* __glo9__ - home and hobbies (hh)
+* __glo10__ - personal care (pc)
+
+In case an ID-variable is not found or any of the glo5-glo10 variables are not
+found the program will terminate and produce an error message. The order of the
+variables are not important but the names are.
+
+## Usage
+
+The main function is `code_CDR(df, id_name, deb = F)` The function takes three 
+arguments. The first argument is the data frame to be used. The second argument 
+is a id variable found in the data set, provided as a quoted string. This is
+used for internal sorting and merging and must be provided. The third argument
+is for debugging use. This can be useful for testing purposes or in case a bug
+is found in the implementation of the algorithm (to the best of my knowledge the
+algorithm is correct).
+
+The function will also perform a few checks on the data. All glo-variables have
+to be numeric and can only take the values 0, 0.5, 1, 2 and 3. In case this is
+not fulfilled the program will give you an error message.
+
+A person must also have complete data in order for the algoritm to work.
+Therefore those that do not have complete data (on glo5-glo10) will get a
+missing observation on the CDR-rating (NA). The program takes care of this
+automatically.
+
+## Examples
+
+I include a data set in this package. An excel file with data that I use
+to test the algorithm. I will use this file for my examples. After you have
+installed the package you can also use this code, but it is much easier to just
+load the data included in the package, scroll down to the *comments* section.
+
+```{r}
+# load package to read excel files
+library(readxl)
+
+# Read data (skip the first row in the excel file as it contains comments and not data)
+indata <- read_excel(system.file("extdata", "examples.xlsx", package = "CDRalg"), skip = 1)
+```
+
+We can now look at this file.
+
+```{r, echo = FALSE}
+indata
+```
+
+The data file contains some blank lines (which I use to separate examples). Let´s
+clean it up a bit using `dplyr`.
+
+```{r, warning = FALSE, message = FALSE}
+# load dplyr
+library(dplyr)
+
+# filter rows that are empty
+indata <- filter(indata, is.na(test) != T)
+
+# print it
+indata
+```
+
+The data is now ready to be processed by our function `code_CDR`.
+
+```{r}
+# load the package
+library(CDRalg)
+
+# assign the results of the function to an object
+results <- code_CDR(df = indata,
+                    id_name = "id",
+                    deb = F)
+```
+
+Print some of the results.
+
+```{r}
+head(results)
+```
+
+We can see that we now have an extra column called `CDR`. This is the assigned 
+diagnosis from the algorithm. If we want to see how the algorithm works we can 
+use the debugging `deb = TRUE` option. This prints the iteration. One iteration
+per line in the data frame (one per person).
+
+```{r, message=TRUE}
+# subsetting the data frame so that we only show one iteration
+indata2 <- slice(indata, 1:1)
+
+# applying the function
+results <- code_CDR(indata2, id_name = "id", deb = T)
+```
+
+Lastly we want to save the output data. There are lots of options but one way is
+writing it to disk as a csv-file.
+
+```{r}
+# load a packade for saving csv:s
+library(readr)
+
+# write it to disk
+write_csv(results, path = "CDRratings.csv")
+```
+
+## Comments
+
+If you want to play around with the function a data set called `CDRexamples` is
+included in the package and it is the same one that I got from the excel file,
+it´s just easier to load. Use:
+
+```{r}
+# load data set
+data("CDRexamples")
+
+# print part of it
+head(CDRexamples)
+```
+
+If you want to know the details of the data set, you can write
+
+```{r, eval = FALSE}
+?CDRexamples
+```
+
+## References
+
+
+
+
+
+

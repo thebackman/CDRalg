@@ -1,0 +1,8 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^buildcode_CDRalg\.R$
+^testcode_CDRalg\.R$
+^data_not_include$
+^todo\.txt$
+^README\.Rmd$
+^README-.*\.png$

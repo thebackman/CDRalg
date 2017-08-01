@@ -21,6 +21,7 @@ code_CDR adds a variable called "CDR" to a data set according to the scoring
 algorithm by Morris (1993).
 }
 \examples{
+data("CDRexamples")
 code_CDR(df = CDRexamples, id_name = "id", deb = FALSE)
 code_CDR(df = CDRexamples, id_name = "id", deb = TRUE)
 }

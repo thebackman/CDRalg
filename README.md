@@ -17,7 +17,7 @@ vignette("CDRalg")
 To install from GitHub use:
 
 ``` r
-devtools::install_github("thebakman/CDRalg")
+devtools::install_github("thebackman/CDRalg")
 ```
 
 ### Notes

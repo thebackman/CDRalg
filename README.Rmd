@@ -36,7 +36,7 @@ vignette("CDRalg")
 To install from GitHub use:
 
 ```{r, eval = F}
-devtools::install_github("thebackman/CDRalg")
+devtools::install_github("thebackman/CDRalg", build_vignettes = TRUE)
 ```
 
 ### Notes

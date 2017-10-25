@@ -74,17 +74,17 @@ code_CDR <- function(df, id_name = "lopnr", deb = FALSE) {
 
   # assign NA to missing obs in case there are any
   if (nrow(df_limited_na) == 0) {  # no missing obs, early return
-    finished <- dplyr::left_join(df, df_limited_comp[,c(id_name, "CDR")], by = id_name)
-    names(finished) <- c(orig_names, "CDR")
+    finished <- dplyr::left_join(df, df_limited_comp[,c(id_name, "CDRGLOBAL")], by = id_name)
+    names(finished) <- c(orig_names, "CDRGLOBAL")
     return(finished)
   }
 
   df_limited_na$CDR <- NA_real_
 
   # stack CDR rating and merge with original data
-  df_id_CDR <- rbind(df_limited_comp[,c(id_name, "CDR")], df_limited_na[,c(id_name, "CDR")])
+  df_id_CDR <- rbind(df_limited_comp[,c(id_name, "CDRGLOBAL")], df_limited_na[,c(id_name, "CDRGLOBAL")])
   finished <- dplyr::left_join(df, df_id_CDR, by = id_name)
-  names(finished) <- c(orig_names, "CDR")
+  names(finished) <- c(orig_names, "CDRGLOBAL")
   return(finished)
 }
 

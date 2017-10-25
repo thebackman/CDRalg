@@ -246,7 +246,7 @@ cdr_coder <- function(df_pure, deb = F) {
     print_o(deb = deb, CDR)
 
     # write CDR to original data frame and return
-    df_pure[i,"CDR"] <- CDR
+    df_pure[i,"CDRGLOBAL"] <- CDR
   }
   return(df_pure)
 }
